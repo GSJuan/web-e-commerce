@@ -1,6 +1,6 @@
 /* Univerdidad: Universidad de La Laguna.
    Grado:       Grado de ingeniería informática.
-   Asignatura:  Algoritmos y estructuras de datos avanzadas
+   Asignatura:  Fundamentos de ingeniería del software
    Proyecto:    e-commerce
    Compilar:    g++ -g -pthread -o Netcp file.cc netcp.cc socket.cc atomic_task.cc
    Ejecutar:    ./Netcp
