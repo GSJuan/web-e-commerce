@@ -18,7 +18,7 @@ LoginRegister::HowUse () {
               << " LOGIN como vendedor\n3. Para REGISTRARTE como cliente\n4. "
               << "Para REGISTRARTE como vendedor\n5. Para salir\n";
     std::cin >> read;
-    if (std::isdigit(read[0]))
+    if (std::isdigit(read[0]) && read.size() == 1)
       value = read[0] - '0';
     read.clear();
 
