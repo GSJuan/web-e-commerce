@@ -2,7 +2,7 @@
    Grado:       Grado de ingeniería informática.
    Asignatura:  Fundamentos de ingeniería del software
    Proyecto:    e-commerce
-   Compilar:    g++ -g -pthread -o Netcp file.cc netcp.cc socket.cc atomic_task.cc
+   Compilar:    g++ -g -pthread -o Netcp file.cc netcp.cc socket.cc atomic_task.cc login_register.cc client.cc make_ip.cc
    Ejecutar:    ./Netcp
 */
 
@@ -206,13 +206,14 @@ File::setArchive (std::string& archive) {
 void 
 File::WriteArray (std::array<char, 1024>& text) {
 
-  for (int travel = 0; travel < 1023; travel++) {
+  for (int travel = 0; travel < 1023 && memory_region_[actual_position_] != '&'; travel++) {
     if (actual_position_ < size_) {
       text[travel] = memory_region_[actual_position_];
       actual_position_++;
     }
   }
-  if (actual_position_ == size_)
+  actual_position_ ++;
+  if (actual_position_ >= size_)
     end_ = true;
 }
 
@@ -230,6 +231,24 @@ File::PrintArray (std::array<char, 1024>& text) {
   }
   if (actual_position_ == size_)
     end_ = true;
+}
+
+
+
+void 
+File::WriteEnd (std::array<char, 1024>& text) {
+
+  int travel = 0;
+  for (; travel < 1024 && text[travel] != '\0'; travel++);
+  travel ++;
+
+  actual_position_ = size_ - travel;
+  
+  for (int travel1 = 0; travel1 < 1024 && text[travel1] != '\0'; travel1++) {
+    memory_region_[actual_position_] = text[travel1];
+    actual_position_++;
+  }
+  memory_region_[actual_position_] = '&';
 }
 
 

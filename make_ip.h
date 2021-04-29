@@ -8,22 +8,16 @@
 
 #pragma once
 
-#include "message.h"
-
 #include <arpa/inet.h>
-#include <unistd.h>
+#include <netinet/in.h>
 
+#include <cstring>
 #include <iostream>
+#include <string>
 
-class Socket {
-  
+class MakeIp {
+
   public:
-	  Socket(const sockaddr_in& address);
-	  ~Socket();
-
-    void SendTo(const Message& message, const sockaddr_in& address);
-	  void ReceiveFrom(Message& message, sockaddr_in& address);
-
-  private:
-	  int fd_;
+    sockaddr_in make_ip_address(int port, const std::string& ip_address = 
+                                std::string());
 };

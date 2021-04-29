@@ -2,22 +2,55 @@
    Grado:       Grado de ingeniería informática.
    Asignatura:  Fundamentos de ingeniería del software
    Proyecto:    e-commerce
-   Compilar:    g++ -g -pthread -o Netcp file.cc netcp.cc socket.cc atomic_task.cc
+   Compilar:    g++ -g -pthread -o Netcp file.cc netcp.cc socket.cc atomic_task.cc login_register.cc client.cc make_ip.cc
    Ejecutar:    ./Netcp
 */
 
-#include "atomic_task.h"
-#include "file.h"
-#include "general_methods.h"
-#include "socket.h"
+#include "client.h"
+#include "login_register.h"
+
+#include <unistd.h>
+
+#include <atomic>
+#include <csignal>
+#include <cstdlib>
+#include <cstring>
+#include <thread>
 
 
 
 void 
-LoginRegister (int good_port, int dest_good_port, std::exception_ptr& eptr, 
+LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr, 
       std::string& ip_address, std::atomic_bool& close) {
-
   try {
+
+    // Puntero a nuestra clase LoginRegister, si no es un puntero, el hilo no lo
+    // acepta
+    LoginRegister* LR = new LoginRegister;
+
+    // Hilos que vamos a usar
+    std::thread client;
+    std::thread server;
+
+    do {
+      // Opciones
+      LR->HowUse();
+
+      // Lanzamos los hilos
+      if (LR->get_Value() <= 4) {
+        client = std::thread (&LoginRegister::LoginReg, LR, LR->get_Value(), 
+                              good_port, dest_good_port, std::ref(ip_address));
+        server = std::thread (&LoginRegister::ServerLoginReg, LR, LR->get_Value(), 
+                              good_port, dest_good_port, std::ref(ip_address));
+        // Esperamos a que los hilos acaben.
+        server.join();
+        client.join();
+      }
+      else close = true;
+
+    } while (!close);
+
+    delete LR;
   }
 
   catch (...) {
@@ -81,33 +114,12 @@ protected_main (int argc, char* argv[]) {
   int good_port = std::stoi(port);
   int dest_good_port = std::stoi(dport);
 
-  // Creamos nuestro manejador de sañales.
-  struct sigaction act {0};
-  act.sa_handler = &ActSignal;
-  sigaction (SIGUSR1, &act, NULL);
-
-  // Creamos nuestro manejador de señales y bloqueamos las señales que no nos
-  // interesen.
-  sigset_t set;
-  sigemptyset(&set);
-  sigaddset(&set, SIGINT);
-  sigaddset(&set, SIGTERM);
-  sigaddset(&set, SIGHUP);
-  pthread_sigmask(SIG_BLOCK, &set, NULL);
-
   std::exception_ptr eptr {};
   std::atomic_bool close {false};
 
   // Creamos nuestro hilo que se encarga del Login/Registro.
-  std::thread process1(&LoginRegister, good_port, dest_good_port, std::ref(eptr),
+  std::thread process1(&LogReg, good_port, dest_good_port, std::ref(eptr),
                        std::ref(ip_address), std::ref(close));
-
-  // Creamos el hilo encargado de indicar que el programa debe acabar si recibe
-  // una de las señales bloqueadas arriba.
-  std::thread close_signal (&Signal, std::ref(set), std::ref(close), 
-                            std::ref(process1));
-  close_signal.detach();
-
   process1.join();
   
   if (eptr)

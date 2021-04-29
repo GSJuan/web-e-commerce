@@ -8,22 +8,21 @@
 
 #pragma once
 
-#include "message.h"
+#include <string>
 
-#include <arpa/inet.h>
-#include <unistd.h>
-
-#include <iostream>
-
-class Socket {
+class Client {
   
   public:
-	  Socket(const sockaddr_in& address);
-	  ~Socket();
+    void Clean ();
 
-    void SendTo(const Message& message, const sockaddr_in& address);
-	  void ReceiveFrom(Message& message, sockaddr_in& address);
+    void set_Password (std::string&);
+    void set_Email (std::string&);
 
+    std::string& get_Password ();
+    std::string& get_email ();
+
+    bool exito {false};
   private:
-	  int fd_;
+    std::string password{""};
+    std::string email{""};
 };

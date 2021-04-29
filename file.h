@@ -2,7 +2,7 @@
    Grado:       Grado de ingeniería informática.
    Asignatura:  Fundamentos de ingeniería del software
    Proyecto:    e-commerce
-   Compilar:    g++ -g -pthread -o Netcp file.cc netcp.cc socket.cc atomic_task.cc
+   Compilar:    g++ -g -pthread -o Netcp file.cc netcp.cc socket.cc atomic_task.cc login_register.cc client.cc make_ip.cc
    Ejecutar:    ./Netcp
 */
 
@@ -41,6 +41,7 @@ class File {
 
     void WriteArray (std::array<char, 1024>& text);
     void PrintArray (std::array<char, 1024>& text);
+    void WriteEnd (std::array<char, 1024>& text);
 
     const int& getFile () const;
     const int& getActualPosition () const;
