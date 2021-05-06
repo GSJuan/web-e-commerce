@@ -37,11 +37,13 @@ LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr,
       LR->HowUse();
 
       // Lanzamos los hilos
-      if (LR->get_Value() <= 4) {
-        client = std::thread (&LoginRegister::LoginReg, LR, LR->get_Value(), 
+      if (LR->get_Value() != 5) {
+                client = std::thread (&LoginRegister::LoginReg, LR, LR->get_Value(), 
                               good_port, dest_good_port, std::ref(ip_address));
-        server = std::thread (&LoginRegister::ServerLoginReg, LR, LR->get_Value(), 
+                server = std::thread (&LoginRegister::ServerLoginReg, LR, LR->get_Value(), 
                               good_port, dest_good_port, std::ref(ip_address));
+
+
         // Esperamos a que los hilos acaben.
         server.join();
         client.join();
