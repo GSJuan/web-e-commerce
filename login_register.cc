@@ -16,13 +16,13 @@ LoginRegister::HowUse () {
   do {
     std::cout << "Introduzca:\n1. Para hacer LOGIN como cliente\n2. Para hacer" 
               << " LOGIN como vendedor\n3. Para REGISTRARTE como cliente\n4. "
-              << "Para REGISTRARTE como vendedor\n5. Para salir\n6. Para ver o modificar los datos de usuario\n";
+              << "Para REGISTRARTE como vendedor\n5. Para salir\n";
     std::cin >> read;
     if (std::isdigit(read[0]) && read.size() == 1)
       value = read[0] - '0';
     read.clear();
 
-  } while (value < 1 || value > 6);
+  } while (value < 1 || value > 5);
 
 }
 
@@ -38,7 +38,7 @@ LoginRegister::get_Value() {
 
 void 
 LoginRegister::LoginReg (int v, int good_port, int dest_good_port,
-                      std::string& ip_address) {
+                      std::string& ip_address, Client& client) {
 
   try {
     // Creamos las estructuras.

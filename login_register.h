@@ -27,12 +27,12 @@ class LoginRegister {
 
     int get_Value();
 
-    void LoginReg (int v, int good_port, int dest_good_port, std::string& ip_address);
+    void LoginReg (int v, int good_port, int dest_good_port, std::string& ip_address, Client& client);
     void ServerLoginReg (int v, int good_port, int dest_good_port, std::string& ip_address);
 
     std::string ReturnEmail(std::array<char, 1024>& text);
 
   private:
     int value {-1};
-    Client client;
+    //Client client;
 };

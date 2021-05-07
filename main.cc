@@ -21,7 +21,7 @@
 
 void 
 LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr, 
-      std::string& ip_address, std::atomic_bool& close) {
+      std::string& ip_address, std::atomic_bool& close, Client& client) {
   try {
 
     // Puntero a nuestra clase LoginRegister, si no es un puntero, el hilo no lo
@@ -29,7 +29,7 @@ LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr,
     LoginRegister* LR = new LoginRegister;
 
     // Hilos que vamos a usar
-    std::thread client;
+    std::thread cliente;
     std::thread server;
 
     do {
@@ -38,15 +38,15 @@ LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr,
 
       // Lanzamos los hilos
       if (LR->get_Value() != 5) {
-                client = std::thread (&LoginRegister::LoginReg, LR, LR->get_Value(), 
-                              good_port, dest_good_port, std::ref(ip_address));
+                cliente = std::thread (&LoginRegister::LoginReg, LR, LR->get_Value(), 
+                              good_port, dest_good_port, std::ref(ip_address), std::ref(client));
                 server = std::thread (&LoginRegister::ServerLoginReg, LR, LR->get_Value(), 
                               good_port, dest_good_port, std::ref(ip_address));
 
 
         // Esperamos a que los hilos acaben.
         server.join();
-        client.join();
+        cliente.join();
       }
       else close = true;
 
@@ -74,7 +74,7 @@ protected_main (int argc, char* argv[]) {
           "información de un .txt a otro socket que guarda el mensaje en un"
           " .txt");
   }
-
+  Client client;
   std::string port;
   std::string ip_address;
   std::string dport;
@@ -121,7 +121,7 @@ protected_main (int argc, char* argv[]) {
 
   // Creamos nuestro hilo que se encarga del Login/Registro.
   std::thread process1(&LogReg, good_port, dest_good_port, std::ref(eptr),
-                       std::ref(ip_address), std::ref(close));
+                       std::ref(ip_address), std::ref(close), std::ref(client));
   process1.join();
   
   if (eptr)
