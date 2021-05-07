@@ -22,6 +22,7 @@ class Client {
     std::string& get_email ();
 
     bool exito {false};
+    bool vendedor {false};
   private:
     std::string password{""};
     std::string email{""};

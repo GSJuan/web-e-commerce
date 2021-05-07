@@ -89,10 +89,15 @@ LoginRegister::LoginReg (int v, int good_port, int dest_good_port,
 
 
     // Diferenciamos entre login/Registro del cliente y del vendedor.
-    if (v == 1 || v == 3)
+    if (v == 1 || v == 3) {
       data = email + " " + pass + " CL";
-    else 
+      client.vendedor = false;
+    }    
+    else {
       data = email + " " + pass + " SE";
+      client.vendedor = true;
+    }
+      
 
     // Guardamos los datos en la estructura.
     for (unsigned travel = 0; travel < data.size(); travel ++) 
@@ -293,7 +298,6 @@ LoginRegister::ServerLoginReg (int v, int good_port, int dest_good_port, std::st
     std::cerr << "¡¡¡ ERROR DESCONOCIDO !!!" << '\n';
   }
 }
-
 
 
 

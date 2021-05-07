@@ -60,7 +60,14 @@ LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr,
   }
 }
 
+void LoguedMenu(int good_port, int dest_good_port, std::exception_ptr& eptr, 
+      std::string& ip_address, std::atomic_bool& close, Client& client) {
+    
+    // Hilos que vamos a usar
+    std::thread cliente;
+    std::thread server;
 
+}
 
 int 
 protected_main (int argc, char* argv[]) {
@@ -118,11 +125,23 @@ protected_main (int argc, char* argv[]) {
 
   std::exception_ptr eptr {};
   std::atomic_bool close {false};
-
-  // Creamos nuestro hilo que se encarga del Login/Registro.
-  std::thread process1(&LogReg, good_port, dest_good_port, std::ref(eptr),
+  do {
+    // Creamos nuestro hilo que se encarga del Login/Registro si el usuario todavia no se ha logueado.
+    if(client.exito == false){
+      std::thread process1(&LogReg, good_port, dest_good_port, std::ref(eptr),
                        std::ref(ip_address), std::ref(close), std::ref(client));
-  process1.join();
+    process1.join();
+    }
+    else {
+      std::thread process2(&LoguedMenu, good_port, dest_good_port, std::ref(eptr),
+                       std::ref(ip_address), std::ref(close), std::ref(client));
+      process2.join();
+      client.exito = false;
+    }
+
+  } while(close == false);
+  
+
   
   if (eptr)
     std::rethrow_exception(eptr);
