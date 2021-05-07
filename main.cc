@@ -8,6 +8,7 @@
 
 #include "client.h"
 #include "login_register.h"
+#include "logued_actions.h"
 
 #include <unistd.h>
 
@@ -61,11 +62,36 @@ LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr,
 }
 
 void LoguedMenu(int good_port, int dest_good_port, std::exception_ptr& eptr, 
-      std::string& ip_address, std::atomic_bool& close, Client& client) {
-    
-    // Hilos que vamos a usar
-    std::thread cliente;
-    std::thread server;
+                std::string& ip_address, std::atomic_bool& close, Client& client) {
+    try {
+      // Hilos que vamos a usar
+      std::thread cliente;
+      std::thread server;
+      LoguedActions* LA = new LoguedActions;
+
+      do {
+        if(client.vendedor) {
+          LA->BenderMenu();
+          if(LA->get_value_bender() != 0) {
+            cliente = std::thread (&LoguedActions::LoguedBender, LA, LA->get_value_bender(), 
+                              good_port, dest_good_port, std::ref(ip_address), std::ref(client));
+          } else close = true;
+
+        } else {
+          LA->ClientMenu();
+          if(LA->get_value_client() != 0) {
+            cliente = std::thread (&LoguedActions::LoguedClient, LA, LA->get_value_client(), 
+                              good_port, dest_good_port, std::ref(ip_address), std::ref(client));
+          } else close = true;
+        }
+      }while(!close);
+
+      delete LA;
+    }
+
+    catch(...) {
+      eptr = std::current_exception();
+    }
 
 }
 
@@ -125,6 +151,7 @@ protected_main (int argc, char* argv[]) {
 
   std::exception_ptr eptr {};
   std::atomic_bool close {false};
+  std::atomic_bool close_session {false};
   do {
     // Creamos nuestro hilo que se encarga del Login/Registro si el usuario todavia no se ha logueado.
     if(client.exito == false){
@@ -134,7 +161,7 @@ protected_main (int argc, char* argv[]) {
     }
     else {
       std::thread process2(&LoguedMenu, good_port, dest_good_port, std::ref(eptr),
-                       std::ref(ip_address), std::ref(close), std::ref(client));
+                       std::ref(ip_address), std::ref(close_session), std::ref(client));
       process2.join();
       client.exito = false;
     }
