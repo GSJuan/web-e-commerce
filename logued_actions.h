@@ -23,17 +23,19 @@ class LoguedActions {
 
  public:
 
-    void ClientMenu();
-    void BenderMenu();
+   void ClientMenu();
+   void BenderMenu();
 
-    int get_value(){return value;}
+   int get_value_client(){return value_client;}
+   int get_value_bender(){return value_bender;}
 
-    void LoguedClient (int v, int good_port, int dest_good_port, std::string& ip_address, Client& client);
-    void LoguedBender (int v, int good_port, int dest_good_port, std::string& ip_address, Client& client);
+   void LoguedClient (int v, int good_port, int dest_good_port, std::string& ip_address, Client& client);
+   void LoguedBender (int v, int good_port, int dest_good_port, std::string& ip_address, Client& client);
 
-    void ServerClient (int v, int good_port, int dest_good_port, std::string& ip_address);
-    void ServerBender (int v, int good_port, int dest_good_port, std::string& ip_address);
+   void ServerClient (int v, int good_port, int dest_good_port, std::string& ip_address);
+   void ServerBender (int v, int good_port, int dest_good_port, std::string& ip_address);
 
   private:
-    int value {-1};
+    int value_client {-1};
+    int value_bender {-1};
 };

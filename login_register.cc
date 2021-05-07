@@ -60,7 +60,6 @@ LoginRegister::LoginReg (int v, int good_port, int dest_good_port,
     std::regex email_expr ("(.+)(@)(.+)(\\.)(.+)");
     std::regex pass_expr ("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{3,100}$");
 
-    if (v < 5) { //en el caso de que las opciones hayan sido de login o registro
     int contador {0};
     // Leemos de teclado.
     do {
@@ -137,7 +136,6 @@ LoginRegister::LoginReg (int v, int good_port, int dest_good_port,
         client.exito = true;
       }
     }
-  }
   else if (v > 5) { //en el caso de que la opcion escogida fuera la de ver o modificar los datos
     if(client.exito == true) {
        std::string read, temp;
