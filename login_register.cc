@@ -16,7 +16,7 @@ LoginRegister::HowUse () {
   do {
     std::cout << "Introduzca:\n1. Para hacer LOGIN como cliente\n2. Para hacer" 
               << " LOGIN como vendedor\n3. Para REGISTRARTE como cliente\n4. "
-              << "Para REGISTRARTE como vendedor\n5. Para salir\n6. Para ver o modificar los datos de usuario";
+              << "Para REGISTRARTE como vendedor\n5. Para salir\n6. Para ver o modificar los datos de usuario\n";
     std::cin >> read;
     if (std::isdigit(read[0]) && read.size() == 1)
       value = read[0] - '0';
@@ -77,6 +77,7 @@ LoginRegister::LoginReg (int v, int good_port, int dest_good_port,
     do {
       std::cout << "Introduza su contraseña:\n";
       std::cin >> pass;
+      if(v <= 2) break;
       contador ++;
       if(contador >2) {
         contador = 0;
