@@ -136,48 +136,7 @@ LoginRegister::LoginReg (int v, int good_port, int dest_good_port,
         client.exito = true;
       }
     }
-  else if (v > 5) { //en el caso de que la opcion escogida fuera la de ver o modificar los datos
-    if(client.exito == true) {
-       std::string read, temp;
-       value = -1;
-      do {
 
-        std::cout << "Introduzca:\n1. Para ver sus datos\n2. Para modificar sus datos\n3. Para regresar al menú principal\n";
-        std::cin >> read;
-        if (std::isdigit(read[0]) && read.size() == 1)
-          value = read[0] - '0';
-        read.clear();
-        
-        switch(value) { 
-          case 1: //ver sus datos
-            std::cout << "Direccion de correo: " << client.get_email() << "\n Contraseña: " << client.get_Password();
-            break;
-
-          case 2: //modificar sus datos
-             std::cout << "Introduzca su nueva dirección de correo: ";
-             std::cin >> temp;
-             client.set_Email(temp);
-             temp.clear();
-             std::cout << "\nIntroduzca su nueva contraseña: ";
-             std::cin >> temp;
-             client.set_Password(temp);
-             temp.clear();
-             std::cout << "\nCambios realizados con exito ";
-            break;
-
-          case 3: //salir de este menu
-            std::cout << "\n\n\n\n";
-            break;
-
-          default:
-              break;
-        }
-      } while(value =! 3);
-    }
-    else {
-      std::cout << "\n\n\nEs necesario que haya iniciado sesión previamente.\n\n\n\n\n\n";
-    }
-  }
     
   }
   catch (std::invalid_argument& error) {

@@ -43,6 +43,8 @@ class File {
     void PrintArray (std::array<char, 1024>& text);
     void WriteEnd (std::array<char, 1024>& text);
 
+    void ChangePasswd(std::array<char, 1024>& text);
+
     const int& getFile () const;
     const int& getActualPosition () const;
     const int& getSize () const;

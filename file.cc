@@ -252,6 +252,47 @@ File::WriteEnd (std::array<char, 1024>& text) {
 }
 
 
+void File::ChangePasswd(std::array<char, 1024>& text){
+bool equal {false};
+actual_position_ = 0;
+
+while (!getEnd()) {
+  int travel = 0; 
+  do {
+    if (memory_region_[actual_position_] != text[travel]){
+      equal = false;
+      break;
+    }
+    else {
+      actual_position_++;
+      travel++;
+      equal == true;
+    }
+
+  } while(text[travel] != ' ');
+
+  while(memory_region_[actual_position_] != '&' && equal == false) {
+    actual_position_++;
+  }
+
+if(equal == true){ 
+  travel ++;
+  actual_position_++;
+  while(text[travel] != ' ') {
+    memory_region_[actual_position_] = text[travel];
+    actual_position_++;
+    travel++;
+  }
+  if(memory_region_[actual_position_] != ' ')
+    while(memory_region_[actual_position_] != ' ') {
+      memory_region_[actual_position_] = ' ';
+      actual_position_++;
+    }
+} 
+  equal = false;
+  actual_position_++;
+};
+}
 
 // Bool que devuelve true si hemos llegado al final del archivo.
 bool
