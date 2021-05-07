@@ -14,6 +14,7 @@
 #include "make_ip.h"
 #include "message.h"
 #include "socket.h"
+#include <regex>
 
 #include <iostream>
 #include <string>

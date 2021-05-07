@@ -57,14 +57,35 @@ LoginRegister::LoginReg (int v, int good_port, int dest_good_port,
     Message message {};
 
     std::string email, pass, data;
+    std::regex email_expr ("(.+)(@)(.+)(\\.)(.+)");
+    std::regex pass_expr ("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{3,100}$");
 
     if (v < 5) { //en el caso de que las opciones hayan sido de login o registro
-
+    int contador {0};
     // Leemos de teclado.
-    std::cout << "Introduza su email:\n";
-    std::cin >> email;
-    std::cout << "Introduza su contraseña:\n";
-    std::cin >> pass;
+    do {
+      std::cout << "Introduza su email:\n";
+      std::cin >> email;
+      contador ++;
+      if(contador >2) {
+        contador = 0;
+        std::cout<<"El email debe seguir el siguiente esquema:"<< 
+        "\nX@X.X, Siendo X cualquier carácter\n";
+      }
+    } while (!regex_match (email, email_expr));
+    contador = 0;
+    do {
+      std::cout << "Introduza su contraseña:\n";
+      std::cin >> pass;
+      contador ++;
+      if(contador >2) {
+        contador = 0;
+        std::cout<<"La contraseña solo debe y puede contener al menos:"<< 
+        "\nUn numero, una mayúscula y una minúscula\n";
+      }
+    } while (!regex_match (pass, pass_expr));
+    contador = 0;
+
 
     // Diferenciamos entre login/Registro del cliente y del vendedor.
     if (v == 1 || v == 3)
