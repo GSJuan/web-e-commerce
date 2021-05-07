@@ -58,7 +58,7 @@ LoginRegister::LoginReg (int v, int good_port, int dest_good_port,
 
     std::string email, pass, data;
     std::regex email_expr ("(.+)(@)(.+)(\\.)(.+)");
-    std::regex pass_expr ("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{3,100}$");
+    std::regex pass_expr ("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{3,10}$");
 
     int contador {0};
     // Leemos de teclado.
