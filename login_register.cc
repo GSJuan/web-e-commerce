@@ -236,13 +236,14 @@ LoginRegister::ServerLoginReg (int v, int good_port, int dest_good_port, std::st
       // Cerramos el archivo que solo se abrió para lectura.
       file.~File();
 
-      // volvemos a abrir el archivo para lecritura y lectura.
+      // volvemos a abrir el archivo para escritura y lectura.
       File file (read_file, O_RDWR, stoi(size) + 1 + cont);
 
       // Escribimos al final.
       file.WriteEnd(message.text);
     }
     socket_local.SendTo(text, socket_remote_address);
+    file.~File();
     
   }
   catch (std::invalid_argument& error) {

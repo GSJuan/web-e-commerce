@@ -75,6 +75,12 @@ void LoguedMenu(int good_port, int dest_good_port, std::exception_ptr& eptr,
           if(LA->get_value_bender() != 0) {
             cliente = std::thread (&LoguedActions::LoguedBender, LA, LA->get_value_bender(), 
                               good_port, dest_good_port, std::ref(ip_address), std::ref(client));
+            if(LA->get_value_bender() == 4) {
+              server = std::thread (&LoguedActions::ServerBender, LA, LA->get_value_bender(), 
+                              good_port, dest_good_port, std::ref(ip_address));
+              server.join();
+           } 
+            cliente.join();
           } else close = true;
 
         } else {
@@ -82,6 +88,13 @@ void LoguedMenu(int good_port, int dest_good_port, std::exception_ptr& eptr,
           if(LA->get_value_client() != 0) {
             cliente = std::thread (&LoguedActions::LoguedClient, LA, LA->get_value_client(), 
                               good_port, dest_good_port, std::ref(ip_address), std::ref(client));
+           if(LA->get_value_client() == 4) {
+              server = std::thread (&LoguedActions::ServerClient, LA, LA->get_value_client(), 
+                              good_port, dest_good_port, std::ref(ip_address));
+              server.join();
+           } 
+            cliente.join();
+
           } else close = true;
         }
       }while(!close);
@@ -156,7 +169,7 @@ protected_main (int argc, char* argv[]) {
     // Creamos nuestro hilo que se encarga del Login/Registro si el usuario todavia no se ha logueado.
     if(client.exito == false){
       std::thread process1(&LogReg, good_port, dest_good_port, std::ref(eptr),
-                       std::ref(ip_address), std::ref(close), std::ref(client));
+                       std::ref(ip_address), std::ref(close_session), std::ref(client));
     process1.join();
     }
     else {

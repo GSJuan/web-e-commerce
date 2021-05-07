@@ -266,7 +266,7 @@ while (!getEnd()) {
     else {
       actual_position_++;
       travel++;
-      equal == true;
+      equal = true;
     }
 
   } while(text[travel] != ' ');

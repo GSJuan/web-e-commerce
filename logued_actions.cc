@@ -13,24 +13,24 @@ void LoguedActions::ClientMenu() {
   std::string read;
   value_client = -1;
   do {
-    std::cout << "Introduzca:\n0.Cerrar sesion\n1. Ver catalogo\n2. Comprar producto\n3. Ver datos\n";
+    std::cout << "Introduzca:\n0.Cerrar sesion\n1. Ver catalogo\n2. Comprar producto\n3. Ver datos\n4. Modificar contraseña\n";
     std::cin >> read;
     if (std::isdigit(read[0]) && read.size() == 1)
       value_client = read[0] - '0';
     read.clear();
-  } while (value_client > 0);
+  } while (value_client < 0 || value_client > 4);
 }
 
 void LoguedActions::BenderMenu() {
   std::string read;
   value_bender = -1;
   do {
-    std::cout << "Introduzca:\n0.Cerrar sesion\n1. Ver catalogo\n2. Publicar producto\n3. Ver datos\n";
+    std::cout << "Introduzca:\n0.Cerrar sesion\n1. Ver catalogo\n2. Publicar producto\n3. Ver datos\n4. Modificar contraseña\n";
     std::cin >> read;
     if (std::isdigit(read[0]) && read.size() == 1)
       value_bender = read[0] - '0';
     read.clear();
-  } while (value_bender > 0);
+  } while (value_bender < 0 || value_bender > 4);
 }
 
 void LoguedActions::LoguedClient (int v, int good_port, int dest_good_port, std::string& ip_address, Client& client) {
@@ -66,7 +66,7 @@ try {
       break;   
 
     case 3: //ver sus datos
-      std::cout << "Direccion de correo: " << client.get_email() << "\n Contraseña: " << client.get_Password();
+      std::cout << "Direccion de correo: " << client.get_email() << "\n Contraseña: " << client.get_Password() << std::endl;
       break;
 
     case 4: //modificar contraseña
@@ -141,7 +141,7 @@ try {
       break;   
 
     case 3: //ver sus datos
-      std::cout << "Direccion de correo: " << client.get_email() << "\n Contraseña: " << client.get_Password();
+      std::cout << "Direccion de correo: " << client.get_email() << "\n Contraseña: " << client.get_Password() << std::endl;
       break;
 
     case 4: //modificar contraseña
@@ -204,11 +204,11 @@ void LoguedActions::ServerClient (int v, int good_port, int dest_good_port, std:
     // Creamos la estructura que va a leer del fichero.
 
     std::string users_file {"Users.txt"};
-    std::string products_file {"productos.txt"};
+    //std::string products_file {"productos.txt"};
 
     // Abrimos el archivo para leer.
-    File file (users_file, 0000, 0);
-    File product_catalog (products_file, 0000, 0);
+    File file (users_file, O_RDWR | S_IRUSR | S_IWUSR, 0);
+    //File product_catalog (products_file, O_RDWR, 0);
     
     socket_local.ReceiveFrom(message, socket_remote_address);
 
