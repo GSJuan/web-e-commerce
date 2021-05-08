@@ -13,7 +13,7 @@ void LoguedActions::ClientMenu() {
   std::string read;
   value_client = -1;
   do {
-    std::cout << "Introduzca:\n0.Cerrar sesion\n1. Ver catalogo\n2. Comprar producto\n3. Ver datos\n4. Modificar contraseña\n";
+    std::cout << "Introduzca:\n0. Cerrar sesion\n1. Ver catalogo\n2. Comprar producto\n3. Ver datos\n4. Modificar contraseña\n";
     std::cin >> read;
     if (std::isdigit(read[0]) && read.size() == 1)
       value_client = read[0] - '0';
@@ -25,7 +25,7 @@ void LoguedActions::BenderMenu() {
   std::string read;
   value_bender = -1;
   do {
-    std::cout << "Introduzca:\n0.Cerrar sesion\n1. Ver catalogo\n2. Publicar producto\n3. Ver datos\n4. Modificar contraseña\n";
+    std::cout << "Introduzca:\n0. Cerrar sesion\n1. Ver catalogo\n2. Publicar producto\n3. Ver datos\n4. Modificar contraseña\n";
     std::cin >> read;
     if (std::isdigit(read[0]) && read.size() == 1)
       value_bender = read[0] - '0';
@@ -81,7 +81,7 @@ try {
          "\nUn numero, una mayúscula y una minúscula\n";
        }
       } while (!regex_match (temp, pass_expr));
-      data = client.get_email() + " " + temp + " SE";
+      data = client.get_email() + " " + temp + " CL";
 
       for (unsigned travel = 0; travel < data.size(); travel ++) 
       message.text[travel] = data[travel];
@@ -207,7 +207,7 @@ void LoguedActions::ServerClient (int v, int good_port, int dest_good_port, std:
     //std::string products_file {"productos.txt"};
 
     // Abrimos el archivo para leer.
-    File file (users_file, O_RDWR | S_IRUSR | S_IWUSR, 0);
+    File file (users_file, O_RDWR, -1);
     //File product_catalog (products_file, O_RDWR, 0);
     
     socket_local.ReceiveFrom(message, socket_remote_address);

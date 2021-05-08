@@ -64,6 +64,20 @@ File::Make (const std::string& archive, int flags, int size) {
       " mapear el archivo en memoria");
   }
 
+  else if (size == -1) {
+    size_ = lseek (file_, 0, SEEK_END);
+    memory_region_ = (char*)mmap(NULL, size_, PROT_WRITE, MAP_SHARED, file_,0);
+    if (memory_region_ == MAP_FAILED)
+      throw std::system_error(errno, std::system_category(), "No se ha podido"
+      " mapear el archivo en memoria");
+
+    // Bloqueamos el archivo.
+    if (lockf(file_, F_LOCK, 0) == -1)
+    throw std::system_error(errno, std::system_category(), "No se ha podido"
+    " bloquear el acceso al archivo");
+    read_ = true;
+  }
+
   // En el caso contrario tendremos que cambiar el tamaño del archivo que hemos
   // creado (ya que de base es 0 el tamaño) y lo mapeamos para escritura.
   else {
@@ -252,46 +266,43 @@ File::WriteEnd (std::array<char, 1024>& text) {
 }
 
 
-void File::ChangePasswd(std::array<char, 1024>& text){
-bool equal {false};
-actual_position_ = 0;
+void File::ChangePasswd(std::array<char, 1024>& text) {
 
-while (!getEnd()) {
-  int travel = 0; 
-  do {
-    if (memory_region_[actual_position_] != text[travel]){
-      equal = false;
+  int travel = 0;
+
+  bool equal {false};
+  actual_position_ = 0;
+
+  while (!getEnd()) {
+    
+    if (text[travel] == ' ') {
+      equal = true;
+      actual_position_++;
+      travel ++;
       break;
     }
+    
+    if (memory_region_[actual_position_] != text[travel]) {
+      while (memory_region_[actual_position_] != '&')
+        actual_position_ ++;
+      travel = 0;
+      actual_position_ ++;
+    }
     else {
-      actual_position_++;
-      travel++;
-      equal = true;
+      travel ++;
+      actual_position_ ++;
     }
-
-  } while(text[travel] != ' ');
-
-  while(memory_region_[actual_position_] != '&' && equal == false) {
-    actual_position_++;
   }
-
-if(equal == true){ 
-  travel ++;
-  actual_position_++;
-  while(text[travel] != ' ') {
-    memory_region_[actual_position_] = text[travel];
-    actual_position_++;
-    travel++;
-  }
-  if(memory_region_[actual_position_] != ' ')
-    while(memory_region_[actual_position_] != ' ') {
-      memory_region_[actual_position_] = ' ';
+  
+  if (equal) {
+    for (; travel < 1024 && text[travel] != ' '; travel++) {
+      memory_region_[actual_position_] = text[travel];
       actual_position_++;
     }
-} 
-  equal = false;
-  actual_position_++;
-};
+  }
+  else {
+    std::cout << "HA OCURRIDO UN ERROR AL INTENTAR ENCONTRAR LA CUENTA\n";
+  }
 }
 
 // Bool que devuelve true si hemos llegado al final del archivo.

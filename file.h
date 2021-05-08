@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <iostream>
 #include <cstring>
 #include <string>
 #include <system_error>
