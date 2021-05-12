@@ -218,7 +218,7 @@ void LoguedActions::ServerClient (int v, int good_port, int dest_good_port, std:
         // Si la cuenta ya estaba 1 y sino 0.
         message.clear();
         file.~File();
-  }
+    }
 
     else {
 
@@ -272,7 +272,7 @@ void LoguedActions::ServerBender (int v, int good_port, int dest_good_port, std:
         // Si la cuenta ya estaba 1 y sino 0.
         message.clear();
         file.~File();
-  }
+    }
 
     else {
 
