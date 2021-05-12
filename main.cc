@@ -22,7 +22,7 @@
 
 void 
 LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr, 
-      std::string& ip_address, std::atomic_bool& close, Client& client) {
+      std::string& ip_address, std::atomic_bool& close_application, std::atomic_bool& close, Client& client) {
   try {
 
     // Puntero a nuestra clase LoginRegister, si no es un puntero, el hilo no lo
@@ -34,6 +34,7 @@ LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr,
     std::thread server;
 
     do {
+      if(close_application) break;
       // Opciones
       LR->HowUse();
 
@@ -48,8 +49,9 @@ LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr,
         // Esperamos a que los hilos acaben.
         server.join();
         cliente.join();
+        if(client.exito == true) close = true;
       }
-      else close = true;
+      else close_application = true;
 
     } while (!close);
 
@@ -164,12 +166,13 @@ protected_main (int argc, char* argv[]) {
 
   std::exception_ptr eptr {};
   std::atomic_bool close {false};
+  std::atomic_bool close_application {false};
   std::atomic_bool close_session {false};
   do {
     // Creamos nuestro hilo que se encarga del Login/Registro si el usuario todavia no se ha logueado.
     if(client.exito == false){
       std::thread process1(&LogReg, good_port, dest_good_port, std::ref(eptr),
-                       std::ref(ip_address), std::ref(close_session), std::ref(client));
+                       std::ref(ip_address), std::ref(close_application), std::ref(close), std::ref(client));
     process1.join();
     }
     else {
@@ -179,7 +182,7 @@ protected_main (int argc, char* argv[]) {
       client.exito = false;
     }
 
-  } while(close == false);
+  } while(!close_application);
   
 
   
