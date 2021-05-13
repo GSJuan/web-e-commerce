@@ -198,7 +198,7 @@ LoginRegister::ServerLoginReg (int v, int good_port, int dest_good_port, std::st
         while (message.text[counter] != '\0' || text.text[counter] != '\0') {
           if (message.text[counter] != text.text[counter])
             equal = false;
-            counter ++;
+          counter ++;
         }
         counter = 0;
       }

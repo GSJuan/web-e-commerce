@@ -77,12 +77,13 @@ void LoguedMenu(int good_port, int dest_good_port, std::exception_ptr& eptr,
           if(LA->get_value_bender() != 0) {
             cliente = std::thread (&LoguedActions::LoguedBender, LA, LA->get_value_bender(), 
                               good_port, dest_good_port, std::ref(ip_address), std::ref(client));
-            if(LA->get_value_bender() == 4) {
+            if(LA->get_value_bender() == 4 || LA->get_value_bender() == 5) {
               server = std::thread (&LoguedActions::ServerBender, LA, LA->get_value_bender(), 
                               good_port, dest_good_port, std::ref(ip_address));
               server.join();
            } 
             cliente.join();
+            if (LA->get_value_bender() == 5) close = true;
           } else close = true;
 
         } else {
@@ -90,13 +91,14 @@ void LoguedMenu(int good_port, int dest_good_port, std::exception_ptr& eptr,
           if(LA->get_value_client() != 0) {
             cliente = std::thread (&LoguedActions::LoguedClient, LA, LA->get_value_client(), 
                               good_port, dest_good_port, std::ref(ip_address), std::ref(client));
-           if(LA->get_value_client() == 4) {
+           if(LA->get_value_client() == 4 || LA->get_value_client() == 5) {
               server = std::thread (&LoguedActions::ServerClient, LA, LA->get_value_client(), 
                               good_port, dest_good_port, std::ref(ip_address));
               server.join();
            } 
             cliente.join();
 
+          if(LA->get_value_client() == 5) close = true;
           } else close = true;
         }
       }while(!close);

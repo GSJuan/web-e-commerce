@@ -305,6 +305,51 @@ void File::ChangePasswd(std::array<char, 1024>& text) {
   }
 }
 
+
+
+void File::DeleteAccount(std::array<char, 1024>& text) {
+
+  int travel = 0;
+
+  bool equal {false};
+  actual_position_ = 0;
+
+  while (!getEnd()) {
+    
+    if (text[travel] == ' ') {
+      equal = true;
+      actual_position_++;
+      travel ++;
+      break;
+    }
+    
+    if (memory_region_[actual_position_] != text[travel]) {
+      while (memory_region_[actual_position_] != '&')
+        actual_position_ ++;
+      travel = 0;
+      actual_position_ ++;
+    }
+    else {
+      travel ++;
+      actual_position_ ++;
+    }
+  }
+  
+  if (equal) {
+    while (memory_region_[actual_position_ - 1] != '&' && actual_position_ != 0)
+      actual_position_ = actual_position_ -1;
+    while (memory_region_[actual_position_ ] != '&') {
+      memory_region_[actual_position_] = ' ';
+      actual_position_ ++;
+    }
+}
+  else {
+    std::cout << "HA OCURRIDO UN ERROR AL INTENTAR ENCONTRAR LA CUENTA\n";
+  }
+}
+
+
+
 // Bool que devuelve true si hemos llegado al final del archivo.
 bool
 File::getEnd () {
