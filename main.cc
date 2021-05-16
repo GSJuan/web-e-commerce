@@ -77,7 +77,7 @@ void LoguedMenu(int good_port, int dest_good_port, std::exception_ptr& eptr,
           if(LA->get_value_bender() != 0) {
             cliente = std::thread (&LoguedActions::LoguedBender, LA, LA->get_value_bender(), 
                               good_port, dest_good_port, std::ref(ip_address), std::ref(client));
-            if(LA->get_value_bender() == 4 || LA->get_value_bender() == 5) {
+            if(LA->get_value_bender() == 4 || LA->get_value_bender() == 5 || LA->get_value_bender() == 2) {
               server = std::thread (&LoguedActions::ServerBender, LA, LA->get_value_bender(), 
                               good_port, dest_good_port, std::ref(ip_address));
               server.join();

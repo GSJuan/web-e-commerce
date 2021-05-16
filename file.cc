@@ -348,6 +348,88 @@ void File::DeleteAccount(std::array<char, 1024>& text) {
   }
 }
 
+void File::UploadExistentProduct(std::array<char, 1024>& text) {
+  int travel = 0;
+
+  bool equal {false};
+  bool product_max {false};
+  actual_position_ = 0;
+
+  while (!getEnd()) {
+    
+    if (text[travel] == '\0') {
+      equal = true;
+      actual_position_++;
+      travel ++;
+      break;
+    }
+    
+    if (memory_region_[actual_position_] != text[travel]) {
+      while (memory_region_[actual_position_] != '&')
+        actual_position_ ++;
+      travel = 0;
+      actual_position_ ++;
+    }
+    else {
+      travel ++;
+      actual_position_ ++;
+    }
+  }
+
+  if (equal) {
+    //actual_position_ ++;
+    if (memory_region_[actual_position_] == 9) {
+      product_max = true;
+    }
+    if(!product_max) {
+      memory_region_[actual_position_] += 1;
+      return;
+    }
+  }
+}
+
+bool File::CheckUploadProduct(std::array<char, 1024>& text) {
+  int travel = 0;
+
+  bool equal {false};
+  bool product_max {false};
+  actual_position_ = 0;
+
+  while (actual_position_ <= size_) {
+    
+    if (text[travel] == '\0') {
+      equal = true;
+      actual_position_++;
+      travel ++;
+      break;
+    }
+    
+    if (memory_region_[actual_position_] != text[travel]) {
+      while (memory_region_[actual_position_] != '&' && actual_position_ <= size_)
+        actual_position_ ++;
+      travel = 0;
+      actual_position_ ++;
+    }
+    else {
+      travel ++;
+      actual_position_ ++;
+    }
+  }
+
+  if (equal) {
+    if (memory_region_[actual_position_] == '9') {
+      product_max = true;
+    }
+    if(!product_max) {
+      return true;
+    }
+  }
+  else if((!equal) || (product_max == true)){
+    return false;
+  }
+
+}
+
 
 
 // Bool que devuelve true si hemos llegado al final del archivo.

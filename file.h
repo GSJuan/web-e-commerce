@@ -46,6 +46,8 @@ class File {
 
     void ChangePasswd(std::array<char, 1024>& text);
     void DeleteAccount(std::array<char, 1024>& text);
+    bool CheckUploadProduct(std::array<char, 1024>& text);
+    void UploadExistentProduct(std::array<char, 1024>& text);
 
     const int& getFile () const;
     const int& getActualPosition () const;
