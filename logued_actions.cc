@@ -323,6 +323,7 @@ void LoguedActions::ServerBender (int v, int good_port, int dest_good_port, std:
       }
       message.clear();
       product_catalog.~File();
+      file.~File();
     }
 
     if( v == 4) {
@@ -331,6 +332,7 @@ void LoguedActions::ServerBender (int v, int good_port, int dest_good_port, std:
         // Si la cuenta ya estaba 1 y sino 0.
         message.clear();
         file.~File();
+        product_catalog.~File();
     }
     if (v == 5) {
 
@@ -338,6 +340,7 @@ void LoguedActions::ServerBender (int v, int good_port, int dest_good_port, std:
 
       message.clear();
       file.~File();
+      product_catalog.~File();
     }
 
     else {

@@ -247,6 +247,19 @@ File::PrintArray (std::array<char, 1024>& text) {
     end_ = true;
 }
 
+void 
+File::WriteBackupArray (std::array<char, 1024>& text) {
+
+  for (int travel = 0; travel < 1023; travel++) {
+    if (actual_position_ < size_) {
+      text[travel] = memory_region_[actual_position_];
+      actual_position_++;
+    }
+  }
+  actual_position_ ++;
+  if (actual_position_ >= size_)
+    end_ = true;
+}
 
 
 void 

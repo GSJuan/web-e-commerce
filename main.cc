@@ -51,7 +51,12 @@ LogReg(int good_port, int dest_good_port, std::exception_ptr& eptr,
         cliente.join();
         if(client.exito == true) close = true;
       }
-      else close_application = true;
+      else {
+        close_application = true;
+        server = std::thread (&LoginRegister::ServerLoginReg, LR, LR->get_Value(), 
+                        good_port, dest_good_port, std::ref(ip_address));
+        server.join();
+      } 
 
     } while (!close);
 

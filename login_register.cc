@@ -179,8 +179,43 @@ LoginRegister::ServerLoginReg (int v, int good_port, int dest_good_port, std::st
     // Abrimos el archivo para leer.
     File file (read_file, 0000, 0);
 
-    
-    socket_local.ReceiveFrom(message, socket_remote_address);
+    if(v!=5) {
+      socket_local.ReceiveFrom(message, socket_remote_address);
+    }
+
+
+    if(v == 5) {
+      std::string users_file {"Users.txt"};
+      std::string products_file {"productos.txt"};
+      std::string backup_users_file {"backup_users.txt"};
+      std::string backup_products_file {"backup_productos.txt"};
+
+      File file1 (users_file, O_RDWR, -1);
+      std::string backup_users_size = file1.getSize();
+
+      File product_catalog (products_file, O_RDWR, 0);
+      std::string backup_products_size = product_catalog.getSize();
+
+      File backup_users (backup_users_file, O_RDWR, stoi(backup_users_size));
+      File backup_products (backup_products_file, O_RDWR, stoi(backup_products_size));
+      while(!file1.getEnd()) {
+        file1.WriteBackupArray(message.text);
+        backup_users.PrintArray(message.text);
+        message.clear();
+      }
+
+      message.clear();
+      while(!product_catalog.getEnd()) {
+        product_catalog.WriteBackupArray(message.text);
+        backup_products.PrintArray(message.text);
+        message.clear();
+      }
+
+      message.clear();
+      product_catalog.~File();
+      file.~File();
+      return;
+    }
     
 
     int counter = 0;
@@ -191,7 +226,7 @@ LoginRegister::ServerLoginReg (int v, int good_port, int dest_good_port, std::st
     while(!file.getEnd()) {
       
       // Leemos del archivo mapeado en memoria.
-      file.WriteArray(text.text);
+      file.WriteBackupArray(text.text);
       // Si queremos hacer login miramos que la cuenta sea de vendedor o de 
       // cliente, miramos la contraseña y el email.
       if (v <= 2) {

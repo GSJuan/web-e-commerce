@@ -43,6 +43,7 @@ class File {
     void WriteArray (std::array<char, 1024>& text);
     void PrintArray (std::array<char, 1024>& text);
     void WriteEnd (std::array<char, 1024>& text);
+    void WriteBackupArray (std::array<char, 1024>& text);
 
     void ChangePasswd(std::array<char, 1024>& text);
     void DeleteAccount(std::array<char, 1024>& text);
